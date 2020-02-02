@@ -1,11 +1,18 @@
 package ui.menu;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
- * MenuBar
+ * Custom MenuBar
  */
-public class MenuBar extends JMenuBar {
+public class MenuBar extends JPanel {
     public MenuBar() {
+        init();
+    }
+
+    private void init() {
+        setBackground(Color.BLACK);
+        setVisible(true);
     }
 }

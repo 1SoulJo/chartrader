@@ -1,10 +1,10 @@
-package ui;
+package ui.frame;
 
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class MainFrameTest {
+public class MainTest {
 
     @Test
     public void start() {
