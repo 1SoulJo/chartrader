@@ -40,7 +40,7 @@ public class Chart extends JInternalFrame {
 
     public JFreeChart getChart() {
         // ToDo : connect data provider to chart
-        
+
         // Test data
         DefaultCategoryDataset dataset1 = new DefaultCategoryDataset();                // bar chart 1
         DefaultCategoryDataset dataset12 = new DefaultCategoryDataset();         // bar chart 2
