@@ -3,8 +3,13 @@ package ui;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Frame for main window.
+ */
 public class MainFrame extends JFrame {
     private static final String TITLE = "charTrader";
+    private static final int INITIAL_WIDTH = 800;
+    private static final int INITIAL_HEIGHT = 600;
 
     public MainFrame() throws HeadlessException {
         init();
@@ -15,8 +20,9 @@ public class MainFrame extends JFrame {
     }
 
     private void init() {
+        setUndecorated(true);
         getContentPane().setBackground(Color.DARK_GRAY);
-        setSize(800, 600);
+        setSize(INITIAL_WIDTH, INITIAL_HEIGHT);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation(
