@@ -25,7 +25,7 @@ public class Chart extends JInternalFrame {
 
     private void init() {
         setTitle("Chart");
-        setBackground(Color.GRAY);
+        setBackground(Color.DARK_GRAY);
 
         setClosable(true);
         setMaximizable(true);

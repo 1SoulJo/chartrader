@@ -13,8 +13,7 @@ public class Trade extends JInternalFrame {
 
     private void init() {
         setTitle("Trade");
-        setBackground(Color.GRAY);
-        setSize(400, 300);
+        setBackground(Color.DARK_GRAY);
 
         setClosable(true);
         setMaximizable(true);

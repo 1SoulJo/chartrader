@@ -13,8 +13,7 @@ public class Provider extends JInternalFrame {
 
     private void init() {
         setTitle("Provider");
-        setBackground(Color.GRAY);
-        setSize(400, 300);
+        setBackground(Color.DARK_GRAY);
 
         setClosable(true);
         setMaximizable(true);
@@ -22,5 +21,6 @@ public class Provider extends JInternalFrame {
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
         setVisible(true);
+
     }
 }
