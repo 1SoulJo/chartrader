@@ -21,6 +21,5 @@ public class Provider extends JInternalFrame {
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
         setVisible(true);
-
     }
 }

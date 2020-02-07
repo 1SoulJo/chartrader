@@ -1,5 +1,7 @@
 package ui.frame;
 
+import ui.menu.MenuBar;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -20,6 +22,7 @@ public class Main extends JFrame {
         setVisible(true);
         Dimension dim = getSize();
         dim.width *= 0.992;
+        dim.height *= 0.96;
 
         Provider pv = new Provider();
         pv.setSize((int)(dim.width * 0.6), (int)(dim.height * 0.3));
@@ -29,7 +32,7 @@ public class Main extends JFrame {
         tr.setLocation(pv.getWidth(), 0);
 
         Chart ch = new Chart();
-        ch.setSize(dim.width, (int)(dim.height * 0.7));
+        ch.setSize(dim.width, dim.height - pv.getHeight());
         ch.setLocation(0, (int)(dim.height * 0.3));
 
         Container desktop = getContentPane();
@@ -39,7 +42,6 @@ public class Main extends JFrame {
     }
 
     private void init() {
-//        setUndecorated(true);
         setSize(INITIAL_WIDTH, INITIAL_HEIGHT);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -52,5 +54,7 @@ public class Main extends JFrame {
         JDesktopPane desktop = new JDesktopPane();
         desktop.setBackground(Color.DARK_GRAY);
         setContentPane(desktop);
+
+        setJMenuBar(new MenuBar());
     }
 }
