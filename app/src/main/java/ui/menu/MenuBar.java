@@ -13,14 +13,17 @@ public class MenuBar extends JMenuBar {
     private JMenu view = new JMenu("View");
 
     // MenuItem
-    private JMenuItem fOpen = new JMenuItem("Open");
     private JMenuItem fExit = new JMenuItem("Exit");
     private JMenuItem vProvider = new JMenuItem("Provider");
-    private JMenuItem vTrader = new JMenuItem("Trader");
+    private JMenuItem vTrade = new JMenuItem("Trade");
     private JMenuItem vChart = new JMenuItem("Chart");
 
-    public MenuBar() {
+    // Event listener
+    private final IMenuEventListener listener;
+
+    public MenuBar(IMenuEventListener listener) {
         init();
+        this.listener = listener;
     }
 
     private void init() {
@@ -31,24 +34,29 @@ public class MenuBar extends JMenuBar {
             add(view);
 
             // Init File menu
-            fOpen.addActionListener((e) -> {});
-            fOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK));
-
             fExit.addActionListener((e) -> System.exit(0));
             fExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK));
 
             file.setMnemonic(KeyEvent.VK_F);
-            file.add(fOpen);
             file.add(fExit);
 
             // Init View menu
-            vProvider.addActionListener((e) -> {});
-            vTrader.addActionListener((e) -> {});
-            vChart.addActionListener((e) -> {});
+            vProvider.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.ALT_DOWN_MASK));
+            vProvider.addActionListener((e) -> {
+                listener.onToggleView(ViewTypes.PROVIDER);
+            });
+            vTrade.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, KeyEvent.ALT_DOWN_MASK));
+            vTrade.addActionListener((e) -> {
+                listener.onToggleView(ViewTypes.TRADE);
+            });
+            vChart.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.ALT_DOWN_MASK));
+            vChart.addActionListener((e) -> {
+                listener.onToggleView(ViewTypes.CHART);
+            });
 
             view.setMnemonic(KeyEvent.VK_V);
             view.add(vProvider);
-            view.add(vTrader);
+            view.add(vTrade);
             view.add(vChart);
         });
     }

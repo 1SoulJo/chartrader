@@ -12,6 +12,8 @@ import javax.swing.plaf.nimbus.NimbusLookAndFeel;
  * Main application
  */
 public class App {
+    private static Main mainFrame;
+
     public static void main(String[] args) {
         // Set LookAndFeel theme
         try {
@@ -22,6 +24,8 @@ public class App {
         }
 
         // Start main
-        new Main().start();
+        mainFrame = new Main(
+                (String viewType) -> mainFrame.toggleView(viewType));
+        mainFrame.start();
     }
 }
