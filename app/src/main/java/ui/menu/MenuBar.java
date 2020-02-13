@@ -1,5 +1,8 @@
 package ui.menu;
 
+import event.EventBusUtil;
+import event.ViewToggleEvent;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -18,12 +21,8 @@ public class MenuBar extends JMenuBar {
     private JMenuItem vTrade = new JMenuItem("Trade");
     private JMenuItem vChart = new JMenuItem("Chart");
 
-    // Event listener
-    private final IMenuEventListener listener;
-
-    public MenuBar(IMenuEventListener listener) {
+    public MenuBar() {
         init();
-        this.listener = listener;
     }
 
     private void init() {
@@ -43,15 +42,15 @@ public class MenuBar extends JMenuBar {
             // Init View menu
             vProvider.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.ALT_DOWN_MASK));
             vProvider.addActionListener((e) -> {
-                listener.onToggleView(ViewTypes.PROVIDER);
+                EventBusUtil.get().post(new ViewToggleEvent(ViewTypes.PROVIDER));
             });
             vTrade.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, KeyEvent.ALT_DOWN_MASK));
             vTrade.addActionListener((e) -> {
-                listener.onToggleView(ViewTypes.TRADE);
+                EventBusUtil.get().post(new ViewToggleEvent(ViewTypes.TRADE));
             });
             vChart.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.ALT_DOWN_MASK));
             vChart.addActionListener((e) -> {
-                listener.onToggleView(ViewTypes.CHART);
+                EventBusUtil.get().post(new ViewToggleEvent(ViewTypes.CHART));
             });
 
             view.setMnemonic(KeyEvent.VK_V);

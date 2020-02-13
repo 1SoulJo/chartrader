@@ -1,6 +1,5 @@
 package ui.frame;
 
-import ui.menu.IMenuEventListener;
 import ui.menu.MenuBar;
 import ui.menu.ViewTypes;
 
@@ -19,12 +18,12 @@ public class Main extends JFrame {
     private JDesktopPane desktop;
     private Provider provider;
     private Trade trade;
-    private CandleChart chart;
+    private Chart chart;
 
-    public Main(IMenuEventListener listener) throws HeadlessException {
+    public Main() throws HeadlessException {
         setVisible(true);
 
-        init(listener);
+        init();
     }
 
     public void start() {
@@ -39,10 +38,16 @@ public class Main extends JFrame {
 
             chart.setSize(fullScreenDim.width, fullScreenDim.height - provider.getHeight());
             chart.setLocation(0, (int)(fullScreenDim.height * 0.3));
+
+            try {
+                provider.setSelected(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
     }
 
-    private void init(IMenuEventListener listener) {
+    private void init() {
         setSize(INITIAL_WIDTH, INITIAL_HEIGHT);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -52,11 +57,10 @@ public class Main extends JFrame {
         desktop.setBackground(Color.DARK_GRAY);
         setContentPane(desktop);
 
-        setJMenuBar(new MenuBar(listener));
+        setJMenuBar(new MenuBar());
         provider = new Provider();
         trade = new Trade();
-//        chart = new Chart();
-        chart = new CandleChart();
+        chart = new Chart();
 
         desktop.add(provider);
         desktop.add(trade);
@@ -76,6 +80,21 @@ public class Main extends JFrame {
                 break;
             default:
                 break;
+        }
+    }
+
+    public void showAddNew() {
+        AddNew addNew = new AddNew();
+        desktop.add(addNew);
+
+        addNew.setLocation(
+                (desktop.getWidth() - addNew.getWidth()) / 2,
+                (desktop.getHeight() - addNew.getHeight()) / 2);
+        addNew.moveToFront();
+        try {
+            addNew.setSelected(true);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

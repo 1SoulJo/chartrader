@@ -1,6 +1,13 @@
 package ui.frame;
 
+import event.EventBusUtil;
+import event.ProviderEvent;
+
 import javax.swing.*;
+import javax.swing.border.MatteBorder;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
@@ -28,25 +35,25 @@ public class Provider extends JInternalFrame {
 
         GridBagConstraints c = new GridBagConstraints();
 
-        JButton button;
+        JButton b;
 
-        button = new JButton("Add");
+        b = new JButton("Add");
         c.fill = GridBagConstraints.BOTH;
         c.weightx = 0.5;
         c.weighty = 0.1;
         c.gridx = 0;
         c.gridy = 2;
-        button.addActionListener((ActionEvent e) -> {
-            new AddNew().setVisible(true);
+        b.addActionListener((ActionEvent e) -> {
+            EventBusUtil.get().post(new ProviderEvent(ProviderEvent.SHOW_ADD_NEW));
         });
-        pane.add(button, c);
+        pane.add(b, c);
 
-        button = new JButton("Remove");
+        b = new JButton("Remove");
         c.fill = GridBagConstraints.BOTH;
         c.weighty = 0.1;
         c.gridx = 1;
         c.gridy = 2;
-        pane.add(button, c);
+        pane.add(b, c);
 
         c.fill = GridBagConstraints.BOTH;
         c.weighty = 0.9;
@@ -67,6 +74,12 @@ public class Provider extends JInternalFrame {
                 {"Soybean", "31.12", "1210100"}
         };
 
-        return new JTable(data, column);
+        JTable t = new JTable(data, column);
+        t.setBackground(Color.GRAY);
+        t.setForeground(Color.WHITE);
+        t.setShowVerticalLines(true);
+        t.setShowVerticalLines(true);
+        t.setShowHorizontalLines(true);
+        return t;
     }
 }
