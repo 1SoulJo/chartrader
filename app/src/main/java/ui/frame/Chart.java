@@ -9,6 +9,7 @@ import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.DatasetRenderingOrder;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.renderer.category.GanttRenderer;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 
@@ -42,9 +43,9 @@ public class Chart extends JInternalFrame {
         // ToDo : connect data provider to chart
 
         // Test data
-        DefaultCategoryDataset dataset1 = new DefaultCategoryDataset();                // bar chart 1
-        DefaultCategoryDataset dataset12 = new DefaultCategoryDataset();         // bar chart 2
-        DefaultCategoryDataset dataset2 = new DefaultCategoryDataset();                // line chart 1
+        DefaultCategoryDataset dataset1 = new DefaultCategoryDataset();
+        DefaultCategoryDataset dataset12 = new DefaultCategoryDataset();
+        DefaultCategoryDataset dataset2 = new DefaultCategoryDataset();
 
         // Data setup
         // Graph 1
@@ -61,7 +62,7 @@ public class Chart extends JInternalFrame {
         dataset1.addValue(0, "S1", "Dec");
 
         // Graph 2
-        dataset12.addValue(0, "S2", "Jan");
+        dataset12.addValue(2.0, "S2", "Jan");
         dataset12.addValue(0, "S2", "Feb");
         dataset12.addValue(0, "S2", "Mar");
         dataset12.addValue(0, "S2", "Apr");
@@ -90,7 +91,7 @@ public class Chart extends JInternalFrame {
 
         // Renderers
         final BarRenderer renderer = new BarRenderer();
-        final BarRenderer renderer12 = new BarRenderer();
+        final BarRenderer renderer12 = new GanttRenderer();
         final LineAndShapeRenderer renderer2 = new LineAndShapeRenderer();
 
         // Common options
@@ -101,7 +102,7 @@ public class Chart extends JInternalFrame {
         renderer.setSeriesPaint(0, new Color(0,162,255));
 
         // Graph 2
-        renderer12.setSeriesPaint(0, new Color(232,168,255));
+        renderer12.setSeriesPaint(0, new Color(55,55,55));
 
         // Graph 3
         renderer2.setDrawOutlines(true);
