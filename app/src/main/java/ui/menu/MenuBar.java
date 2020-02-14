@@ -34,7 +34,7 @@ public class MenuBar extends JMenuBar {
 
             // Init File menu
             fExit.addActionListener((e) -> System.exit(0));
-            fExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK));
+            fExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.ALT_DOWN_MASK));
 
             file.setMnemonic(KeyEvent.VK_F);
             file.add(fExit);

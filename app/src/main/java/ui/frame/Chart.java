@@ -85,6 +85,6 @@ public class Chart extends JInternalFrame {
         Collections.reverse(dataItems);
 
         // Convert the list into an array
-        return  dataItems.toArray(new OHLCDataItem[dataItems.size()]);
+        return  dataItems.toArray(new OHLCDataItem[0]);
     }
 }

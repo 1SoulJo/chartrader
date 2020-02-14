@@ -4,10 +4,6 @@ import event.EventBusUtil;
 import event.ProviderEvent;
 
 import javax.swing.*;
-import javax.swing.border.MatteBorder;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
@@ -80,6 +76,7 @@ public class Provider extends JInternalFrame {
         t.setShowVerticalLines(true);
         t.setShowVerticalLines(true);
         t.setShowHorizontalLines(true);
+
         return t;
     }
 }
