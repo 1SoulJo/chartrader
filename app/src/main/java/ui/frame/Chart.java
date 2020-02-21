@@ -69,7 +69,7 @@ public class Chart extends JInternalFrame {
             DateFormat df = new SimpleDateFormat("y-M-d");
             for (int i = 0; i < 60; i++) {
                 Date date = df.parse("2019-03-" + (i + 1));
-                double open = 12.0 - (i / 60);
+                double open = 12.0 - (i % 22);
                 double high = 13.0 + (i % 4);
                 double low = 10.0 - (i % 33);
                 double close = 12.24 - (i % 10);

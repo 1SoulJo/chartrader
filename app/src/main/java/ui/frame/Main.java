@@ -84,15 +84,22 @@ public class Main extends JFrame {
     }
 
     public void showAddNew() {
-        AddNew addNew = new AddNew();
-        desktop.add(addNew);
+        showCenter(new AddNew());
+    }
 
-        addNew.setLocation(
-                (desktop.getWidth() - addNew.getWidth()) / 2,
-                (desktop.getHeight() - addNew.getHeight()) / 2);
-        addNew.moveToFront();
+    public void showOrder() {
+        showCenter(new Order());
+    }
+
+    public void showCenter(JInternalFrame component) {
+        desktop.add(component);
+
+        component.setLocation(
+                (desktop.getWidth() - component.getWidth()) / 2,
+                (desktop.getHeight() - component.getHeight()) / 2);
+        component.moveToFront();
         try {
-            addNew.setSelected(true);
+            component.setSelected(true);
         } catch (Exception e) {
             e.printStackTrace();
         }

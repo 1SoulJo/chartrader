@@ -1,7 +1,6 @@
 package ui.frame;
 
 import javax.swing.*;
-import javax.swing.plaf.BorderUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
@@ -41,20 +40,19 @@ public class AddNew extends JInternalFrame {
         combo.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
+                // ToDo: Auto complete
                 String input = combo.getEditor().getItem().toString() + e.getKeyChar();
                 combo.setPopupVisible(true);
             }
         });
 
-        c.gridx = 0;
-        c.gridy = 0;
+        c.gridx = 0; c.gridy = 0;
         c.gridwidth = 2;
         c.fill = GridBagConstraints.BOTH;
         add(combo, c);
 
         JButton b = new JButton("Add");
-        c.gridx = 0;
-        c.gridy = 1;
+        c.gridx = 0; c.gridy = 1;
         c.gridwidth = 1;
         c.weightx = 0.5;
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -65,8 +63,7 @@ public class AddNew extends JInternalFrame {
         add(b, c);
 
         b = new JButton("Cancel");
-        c.gridx = 1;
-        c.gridy = 1;
+        c.gridx = 1; c.gridy = 1;
         b.addActionListener((ActionEvent e) -> {
             dispose();
         });

@@ -9,6 +9,5 @@
 
 rootProject.name = 'chartrader'
 
-include 'ui'
 include 'app'
 include 'docs'

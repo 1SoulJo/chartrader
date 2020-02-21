@@ -16,7 +16,9 @@ public class MenuBar extends JMenuBar {
     private JMenu view = new JMenu("View");
 
     // MenuItem
+    private JMenuItem fImport = new JMenuItem("Import data");
     private JMenuItem fExit = new JMenuItem("Exit");
+
     private JMenuItem vProvider = new JMenuItem("Provider");
     private JMenuItem vTrade = new JMenuItem("Trade");
     private JMenuItem vChart = new JMenuItem("Chart");
@@ -33,10 +35,15 @@ public class MenuBar extends JMenuBar {
             add(view);
 
             // Init File menu
+            fImport.addActionListener((e) -> {
+                JFileChooser fc = new JFileChooser();
+                fc.showOpenDialog(MenuBar.this);
+            });
             fExit.addActionListener((e) -> System.exit(0));
             fExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.ALT_DOWN_MASK));
 
             file.setMnemonic(KeyEvent.VK_F);
+            file.add(fImport);
             file.add(fExit);
 
             // Init View menu

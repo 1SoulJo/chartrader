@@ -1,7 +1,9 @@
 package ui.frame;
 
+import event.EventBusUtil;
+import event.TradeEvent;
+
 import javax.swing.*;
-import javax.swing.border.MatteBorder;
 import java.awt.*;
 
 /**
@@ -42,7 +44,7 @@ public class Trade extends JInternalFrame {
         c.weightx = 0.2; c.weighty = 0.1;
         c.gridwidth = 1;
         c.gridx = 0; c.gridy = 2;
-        add(new JLabel("Place an order"), c);
+        add(new JLabel("Place order"), c);
 
         // add text box
         c.weightx = 0.8; c.weighty = 0.1;
@@ -51,11 +53,21 @@ public class Trade extends JInternalFrame {
         add(tf, c);
 
         // add buttons
+        JButton b;
+
         c.gridx = 0; c.gridy = 3;
-        add(new JButton("Buy"), c);
+        b = new JButton("Buy");
+        b.addActionListener((e) -> {
+            EventBusUtil.get().post(new TradeEvent(TradeEvent.OPEN_ORDER));
+        });
+        add(b, c);
 
         c.gridx = 1; c.gridy = 3;
-        add(new JButton("Sell"), c);
+        b = new JButton("Sell");
+        b.addActionListener((e) -> {
+            EventBusUtil.get().post(new TradeEvent(TradeEvent.OPEN_ORDER));
+        });
+        add(b, c);
     }
 
     private JTable createTable() {
@@ -65,6 +77,8 @@ public class Trade extends JInternalFrame {
         };
 
         JTable t = new JTable(data, column);
+        t.setBackground(Color.GRAY);
+        t.setForeground(Color.WHITE);
         t.setShowHorizontalLines(true);
         t.setShowVerticalLines(true);
 

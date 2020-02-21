@@ -3,21 +3,21 @@ package event;
 import com.google.common.eventbus.Subscribe;
 import ui.frame.Main;
 
-public class ProviderEventSubscriber {
+public class TradeEventSubscriber {
     private final Main main;
 
     @Subscribe
-    public void eventTriggered(ProviderEvent e) {
+    public void eventTriggered(TradeEvent e) {
         switch (e.getType()) {
-            case ProviderEvent.SHOW_ADD_NEW:
-                main.showAddNew();
+            case TradeEvent.OPEN_ORDER:
+                main.showOrder();
                 break;
             default:
                 break;
         }
     }
 
-    public ProviderEventSubscriber(Main main) {
+    public TradeEventSubscriber(Main main) {
         this.main = main;
     }
 }
