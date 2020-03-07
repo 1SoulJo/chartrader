@@ -10,4 +10,5 @@
 rootProject.name = 'chartrader'
 
 include 'app'
+include 'provider'
 include 'docs'

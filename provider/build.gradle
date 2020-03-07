@@ -9,6 +9,9 @@
 plugins {
     // Apply the java-library plugin to add support for Java Library
     id 'java-library'
+
+    // Lombok
+    id "io.freefair.lombok" version "5.0.0-rc4"
 }
 
 repositories {
@@ -26,4 +29,7 @@ dependencies {
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
+
+    compile 'mysql:mysql-connector-java:8.0.15'
+    compile 'org.hibernate:hibernate-core:5.4.11.Final'
 }
