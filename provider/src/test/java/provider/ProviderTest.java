@@ -17,8 +17,9 @@ public class ProviderTest {
             transaction = session.beginTransaction();
 
             Account a = new Account();
+            a.setUserId("hansol0486");
+            a.setPassword("Temp1234!");
             a.setBalance(100000);
-            a.setUserId(0);
             session.save(a);
         } catch (Exception e) {
             e.printStackTrace();
@@ -26,7 +27,7 @@ public class ProviderTest {
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             List<Account> accounts = session.createQuery("from Account", Account.class).list();
-            accounts.forEach(a -> System.out.println(a.getBalance()));
+            accounts.forEach(a -> System.out.println(a.getUserId() + ", " + a.getBalance()));
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();

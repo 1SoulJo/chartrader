@@ -14,4 +14,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "ohlc")
 public class OHLC {
+    private float open;
+    private float high;
+    private float low;
+    private float close;
 }

@@ -19,7 +19,10 @@ public class Account {
     private int id;
 
     @Column(name = "user_id")
-    private int userId;
+    private String userId;
+
+    @Column(name = "password")
+    private String password;
 
     @Column(name = "balance")
     private double balance;

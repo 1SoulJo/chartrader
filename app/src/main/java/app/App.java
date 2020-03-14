@@ -17,7 +17,6 @@ import java.awt.*;
  * Main application
  */
 public class App {
-    private static Main mainFrame;
 
     public static void main(String[] args) {
         // Set LookAndFeel theme
@@ -32,7 +31,7 @@ public class App {
         }
 
         // Start main
-        mainFrame = new Main();
+        Main mainFrame = new Main();
         mainFrame.start();
 
         // EventBut init

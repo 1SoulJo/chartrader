@@ -14,4 +14,6 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "instrument")
 public class Instrument {
+    private String id;
+    private String name;
 }
