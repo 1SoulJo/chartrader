@@ -3,10 +3,8 @@
  */
 package app;
 
-import event.EventBusUtil;
-import event.MenuEventSubscriber;
-import event.ProviderEventSubscriber;
-import event.TradeEventSubscriber;
+import com.google.common.eventbus.Subscribe;
+import event.*;
 import ui.frame.Main;
 
 import javax.swing.*;
@@ -33,10 +31,5 @@ public class App {
         // Start main
         Main mainFrame = new Main();
         mainFrame.start();
-
-        // EventBut init
-        EventBusUtil.get().register(new MenuEventSubscriber(mainFrame));
-        EventBusUtil.get().register(new ProviderEventSubscriber(mainFrame));
-        EventBusUtil.get().register(new TradeEventSubscriber(mainFrame));
     }
 }

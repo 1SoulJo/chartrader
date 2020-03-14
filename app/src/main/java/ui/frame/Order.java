@@ -1,19 +1,29 @@
 package ui.frame;
 
+import transaction.Transaction;
+import transaction.TransactionDAO;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+/**
+ * Order popup view
+ */
 public class Order extends JInternalFrame {
     private static final String TITLE = "Place Order";
     private static final int WIDTH = 400;
     private static final int HEIGHT = 200;
 
+    private int type;
+    private JTextField name;
     private JTextField quantity;
     private JTextField price;
 
-    public Order() {
+    public Order(int type) {
         init();
+        this.type = type;
     }
 
     private void init() {
@@ -32,8 +42,8 @@ public class Order extends JInternalFrame {
 
         JLabel l = new JLabel("Name");
         p.add(l);
-        JTextField t = new JTextField("SP500");
-        p.add(t);
+        name = new JTextField("SP500");
+        p.add(name);
         pane.add(p);
 
         p = new JPanel();
@@ -42,16 +52,12 @@ public class Order extends JInternalFrame {
         p.add(l);
         JPanel p2 = new JPanel();
         JButton b = new JButton("-");
-        b.addActionListener((ActionEvent e) -> {
-            quantity.setText(String.valueOf(Integer.parseInt(quantity.getText()) - 1));
-        });
+        b.addActionListener((e) -> quantity.setText(String.valueOf(Integer.parseInt(quantity.getText()) - 1)));
         p2.add(b);
         quantity = new JTextField("1");
         p2.add(quantity);
         b = new JButton("+");
-        b.addActionListener((ActionEvent e) -> {
-            quantity.setText(String.valueOf(Integer.parseInt(quantity.getText()) + 1));
-        });
+        b.addActionListener((e) -> quantity.setText(String.valueOf(Integer.parseInt(quantity.getText()) + 1)));
         p2.add(b);
         p.add(p2);
         pane.add(p);
@@ -62,22 +68,32 @@ public class Order extends JInternalFrame {
         p.add(l);
         p2 = new JPanel();
         b = new JButton("-");
-        b.addActionListener((ActionEvent e) -> {
-            price.setText(String.valueOf(Double.parseDouble(price.getText()) - 0.25));
-        });
+        b.addActionListener(
+                (e) -> price.setText(String.valueOf(Double.parseDouble(price.getText()) - 0.25)));
         p2.add(b);
         price = new JTextField("1513.25");
         p2.add(price);
         b = new JButton("+");
-        b.addActionListener((ActionEvent e) -> {
-            price.setText(String.valueOf(Double.parseDouble(price.getText()) + 0.25));
-        });
+        b.addActionListener((e) -> price.setText(String.valueOf(Double.parseDouble(price.getText()) + 0.25)));
         p2.add(b);
         p.add(p2);
         pane.add(p);
 
         p = new JPanel();
         b = new JButton("Place Order");
+        b.addActionListener((e) -> {
+            Transaction t = new Transaction();
+            t.setUserId("Hansol");
+            t.setAccountId(1);
+            t.setInstrumentId(name.getText());
+            SimpleDateFormat dayTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            t.setDate(dayTime.format(new Date(System.currentTimeMillis())));
+            t.setPrice(Float.parseFloat(price.getText()));
+            t.setQuantity(Integer.parseInt(quantity.getText()));
+            t.setType(type);
+
+            TransactionDAO.getInstance().save(t);
+        });
         p.add(b);
         pane.add(p);
 

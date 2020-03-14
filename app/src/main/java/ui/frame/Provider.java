@@ -1,7 +1,7 @@
 package ui.frame;
 
 import event.EventBusUtil;
-import event.ProviderEvent;
+import event.MainViewEvent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,7 +41,7 @@ public class Provider extends JInternalFrame {
         c.weightx = 0.5; c.weighty = 0.1;
         c.gridx = 0; c.gridy = 2;
         b.addActionListener((ActionEvent e) -> {
-            EventBusUtil.get().post(new ProviderEvent(ProviderEvent.SHOW_ADD_NEW));
+            EventBusUtil.get().post(new MainViewEvent(MainViewEvent.PROVIDER_ADD_NEW));
         });
         pane.add(b, c);
 

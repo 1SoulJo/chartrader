@@ -1,24 +1,25 @@
 package transaction;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.Date;
 
 /**
  * Value object for transaction
  */
 @Data
 @NoArgsConstructor
-class Transaction {
+@AllArgsConstructor
+public class Transaction {
     // Transaction types
-    private static final int TYPE_BUY = 0;
-    private static final int TYPE_SELL = 1;
+    public static final int TYPE_BUY = 0;
+    public static final int TYPE_SELL = 1;
 
+    private String userId;
     private int accountId;
     private String instrumentId;
-    private Date date;
-    private long price;
+    private String date;
+    private float price;
     private int type;
     private int quantity;
 }

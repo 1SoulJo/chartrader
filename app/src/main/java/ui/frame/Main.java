@@ -1,7 +1,9 @@
 package ui.frame;
 
+import com.google.common.eventbus.Subscribe;
+import event.EventBusUtil;
+import event.MainViewEvent;
 import ui.menu.MenuBar;
-import ui.menu.ViewTypes;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,6 +26,9 @@ public class Main extends JFrame {
         setVisible(true);
 
         init();
+
+        // Register event listener
+        EventBusUtil.get().register(this);
     }
 
     public void start() {
@@ -67,30 +72,6 @@ public class Main extends JFrame {
         desktop.add(chart);
     }
 
-    public void toggleView(String type) {
-        switch (type) {
-            case ViewTypes.PROVIDER:
-                provider.setVisible(!provider.isVisible());
-                break;
-            case ViewTypes.TRADE:
-                trade.setVisible(!trade.isVisible());
-                break;
-            case ViewTypes.CHART:
-                chart.setVisible(!chart.isVisible());
-                break;
-            default:
-                break;
-        }
-    }
-
-    public void showAddNew() {
-        showCenter(new AddNew());
-    }
-
-    public void showOrder() {
-        showCenter(new Order());
-    }
-
     public void showCenter(JInternalFrame component) {
         desktop.add(component);
 
@@ -102,6 +83,36 @@ public class Main extends JFrame {
             component.setSelected(true);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * Event Listener for any event that main view is responsible
+     * @param e MainViewEvent
+     */
+    @Subscribe
+    public void onMainViewEvent(MainViewEvent e) {
+        switch (e.getType()) {
+            case MainViewEvent.TOGGLE_VIEW_PROVIDER:
+                provider.setVisible(!provider.isVisible());
+                break;
+            case MainViewEvent.TOGGLE_VIEW_TRADE:
+                trade.setVisible(!trade.isVisible());
+                break;
+            case MainViewEvent.TOGGLE_VIEW_CHART:
+                chart.setVisible(!chart.isVisible());
+                break;
+            case MainViewEvent.PROVIDER_ADD_NEW:
+                showCenter(new AddNew());
+                break;
+            case MainViewEvent.TRADE_OPEN_ORDER:
+                showCenter(new Order(e.getIntParam()));
+                break;
+            case MainViewEvent.TOOLS_TRADE_HISTORY:
+                showCenter(new TradeHistory());
+                break;
+            default:
+                break;
         }
     }
 }

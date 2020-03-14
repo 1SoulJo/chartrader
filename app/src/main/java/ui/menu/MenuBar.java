@@ -1,7 +1,8 @@
 package ui.menu;
 
 import event.EventBusUtil;
-import event.ViewToggleEvent;
+import event.MainViewEvent;
+import ui.frame.Main;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,6 +15,7 @@ public class MenuBar extends JMenuBar {
     // Menu
     private JMenu file = new JMenu("File");
     private JMenu view = new JMenu("View");
+    private JMenu tools = new JMenu("Tools");
 
     // MenuItem
     private JMenuItem fImport = new JMenuItem("Import data");
@@ -22,6 +24,8 @@ public class MenuBar extends JMenuBar {
     private JMenuItem vProvider = new JMenuItem("Provider");
     private JMenuItem vTrade = new JMenuItem("Trade");
     private JMenuItem vChart = new JMenuItem("Chart");
+
+    private JMenuItem tTradeHistory = new JMenuItem("Trade History");
 
     public MenuBar() {
         init();
@@ -33,6 +37,7 @@ public class MenuBar extends JMenuBar {
             setVisible(true);
             add(file);
             add(view);
+            add(tools);
 
             // Init File menu
             fImport.addActionListener((e) -> {
@@ -48,22 +53,26 @@ public class MenuBar extends JMenuBar {
 
             // Init View menu
             vProvider.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.ALT_DOWN_MASK));
-            vProvider.addActionListener((e) -> {
-                EventBusUtil.get().post(new ViewToggleEvent(ViewTypes.PROVIDER));
-            });
+            vProvider.addActionListener(
+                    (e) -> EventBusUtil.get().post(new MainViewEvent(MainViewEvent.TOGGLE_VIEW_PROVIDER)));
+
             vTrade.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, KeyEvent.ALT_DOWN_MASK));
-            vTrade.addActionListener((e) -> {
-                EventBusUtil.get().post(new ViewToggleEvent(ViewTypes.TRADE));
-            });
+            vTrade.addActionListener(
+                    (e) -> EventBusUtil.get().post(new MainViewEvent(MainViewEvent.TOGGLE_VIEW_TRADE)));
+
             vChart.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.ALT_DOWN_MASK));
-            vChart.addActionListener((e) -> {
-                EventBusUtil.get().post(new ViewToggleEvent(ViewTypes.CHART));
-            });
+            vChart.addActionListener(
+                    (e) -> EventBusUtil.get().post(new MainViewEvent(MainViewEvent.TOGGLE_VIEW_CHART)));
 
             view.setMnemonic(KeyEvent.VK_V);
             view.add(vProvider);
             view.add(vTrade);
             view.add(vChart);
+
+            tTradeHistory.addActionListener(
+                    (e) -> EventBusUtil.get().post(new MainViewEvent(MainViewEvent.TOOLS_TRADE_HISTORY)));
+            tools.setMnemonic(KeyEvent.VK_T);
+            tools.add(tTradeHistory);
         });
     }
 }
