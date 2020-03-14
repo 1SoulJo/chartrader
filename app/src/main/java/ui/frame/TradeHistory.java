@@ -1,10 +1,7 @@
 package ui.frame;
 
-import event.EventBusUtil;
-import event.MainViewEvent;
 import transaction.Transaction;
 import transaction.TransactionDAO;
-import ui.menu.MenuBar;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

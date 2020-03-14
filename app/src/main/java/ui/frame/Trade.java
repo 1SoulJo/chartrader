@@ -1,20 +1,28 @@
 package ui.frame;
 
+import com.google.common.eventbus.Subscribe;
 import event.EventBusUtil;
 import event.MainViewEvent;
+import event.TradeViewEvent;
 import transaction.Transaction;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import java.awt.*;
 
 /**
  * Trade frame.
  */
 public class Trade extends JInternalFrame {
+    private final String[] column = { "User", "Account Id", "Instrument", "Date", "Price", "Type", "Quantity"};
     private JTable table;
+    DefaultTableModel tableModel = new DefaultTableModel(column, 0);
 
     public Trade() {
         init();
+
+        EventBusUtil.get().register(this);
     }
 
     private void init() {
@@ -79,17 +87,24 @@ public class Trade extends JInternalFrame {
     }
 
     private JTable createTable() {
-        String[] column = { "Name", "Position", "Price", "Quantity", "P/L"};
-        String[][] data = {
-                { "S&P 500", "Long", "3123.25", "3", "$ 240" }
-        };
-
-        JTable t = new JTable(data, column);
+        JTable t = new JTable(tableModel);
         t.setBackground(Color.GRAY);
         t.setForeground(Color.WHITE);
         t.setShowHorizontalLines(true);
         t.setShowVerticalLines(true);
 
         return t;
+    }
+
+    @Subscribe
+    public void onTradeEvent(TradeViewEvent e) {
+        switch (e.getType()) {
+            case TradeViewEvent.ORDER_PLACED:
+                Transaction t = e.getTransactionParam();
+                tableModel.addRow(new Object[]{t.getUserId(), t.getAccountId(), t.getInstrumentId(), t.getDate(),
+                        t.getPrice(), t.getType() == 0 ? "Buy" : "Sell", t.getQuantity()});
+                table.repaint();
+                break;
+        }
     }
 }

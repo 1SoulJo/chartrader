@@ -3,6 +3,9 @@ package event;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Event class for main view
+ */
 public class MainViewEvent {
     public static final int TOGGLE_VIEW_PROVIDER = 1;
     public static final int TOGGLE_VIEW_TRADE = 2;

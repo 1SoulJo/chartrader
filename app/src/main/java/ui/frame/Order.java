@@ -1,5 +1,7 @@
 package ui.frame;
 
+import event.EventBusUtil;
+import event.TradeViewEvent;
 import transaction.Transaction;
 import transaction.TransactionDAO;
 
@@ -92,7 +94,15 @@ public class Order extends JInternalFrame {
             t.setQuantity(Integer.parseInt(quantity.getText()));
             t.setType(type);
 
+            // Save into trade log
             TransactionDAO.getInstance().save(t);
+
+            // Post event
+            TradeViewEvent event = new TradeViewEvent(TradeViewEvent.ORDER_PLACED);
+            event.setTransactionParam(t);
+            EventBusUtil.get().post(event);
+
+            Order.this.dispose();
         });
         p.add(b);
         pane.add(p);
