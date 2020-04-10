@@ -3,7 +3,9 @@ package provider;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.junit.Test;
+import provider.dao.PriceDao;
 import provider.entity.Account;
+import provider.entity.Price;
 import provider.util.HibernateUtil;
 
 import java.util.List;
@@ -34,5 +36,14 @@ public class ProviderTest {
             }
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void priceTest() {
+        PriceDao dao = PriceDao.get();
+
+        dao.getSymbols().forEach(System.out::println);
+
+        dao.getPriceData("AAPL").forEach(System.out::println);
     }
 }
