@@ -2,8 +2,10 @@ package ui.frame;
 
 import event.EventBusUtil;
 import event.TradeViewEvent;
-import transaction.Transaction;
-import transaction.TransactionDAO;
+import provider.entity.Position;
+import provider.entity.Transaction;
+import provider.dao.TransactionDao;
+import app.TransactionManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,9 +16,8 @@ import java.util.Date;
  * Order popup view
  */
 public class Order extends JInternalFrame {
-    private static final String TITLE = "Place Order";
     private static final int WIDTH = 400;
-    private static final int HEIGHT = 200;
+    private static final int HEIGHT = 300;
 
     private int type;
     private JTextField name;
@@ -30,7 +31,7 @@ public class Order extends JInternalFrame {
 
     private void init() {
         Container pane = getContentPane();
-        setTitle(TITLE);
+        setTitle(type == 0 ? "Buy Order" : "Sell Order");
         setSize(WIDTH, HEIGHT);
         setClosable(true);
         setMaximizable(false);
@@ -40,11 +41,14 @@ public class Order extends JInternalFrame {
 
         setVisible(true);
 
+        TransactionManager tm = TransactionManager.get();
+
         JPanel p = new JPanel();
 
         JLabel l = new JLabel("Name");
         p.add(l);
-        name = new JTextField("SP500");
+        name = new JTextField(tm.getActiveInstrument());
+        name.setEditable(false);
         p.add(name);
         pane.add(p);
 
@@ -57,6 +61,7 @@ public class Order extends JInternalFrame {
         b.addActionListener((e) -> quantity.setText(String.valueOf(Integer.parseInt(quantity.getText()) - 1)));
         p2.add(b);
         quantity = new JTextField("1");
+        quantity.setPreferredSize(new Dimension(100, 30));
         p2.add(quantity);
         b = new JButton("+");
         b.addActionListener((e) -> quantity.setText(String.valueOf(Integer.parseInt(quantity.getText()) + 1)));
@@ -71,12 +76,13 @@ public class Order extends JInternalFrame {
         p2 = new JPanel();
         b = new JButton("-");
         b.addActionListener(
-                (e) -> price.setText(String.valueOf(Double.parseDouble(price.getText()) - 0.25)));
+                (e) -> price.setText(String.valueOf(Double.parseDouble(price.getText()) - 0.1)));
         p2.add(b);
-        price = new JTextField("1513.25");
+        price = new JTextField("" + tm.getPrice());
+        price.setPreferredSize(new Dimension(100, 30));
         p2.add(price);
         b = new JButton("+");
-        b.addActionListener((e) -> price.setText(String.valueOf(Double.parseDouble(price.getText()) + 0.25)));
+        b.addActionListener((e) -> price.setText(String.valueOf(Double.parseDouble(price.getText()) + 0.1)));
         p2.add(b);
         p.add(p2);
         pane.add(p);
@@ -93,14 +99,22 @@ public class Order extends JInternalFrame {
             t.setPrice(Float.parseFloat(price.getText()));
             t.setQuantity(Integer.parseInt(quantity.getText()));
             t.setType(type);
+            t.setCompleted(false);
+
+            Position position = tm.getPositions().get(t.getInstrumentId());
+            if (position != null && t.getType() == Transaction.TYPE_SELL) {
+                if (position.getQuantity() < t.getQuantity()) {
+                    JOptionPane.showMessageDialog(this, "Quantity exceeded current position quantity.");
+                    return;
+                }
+            }
 
             // Save into trade log
-            TransactionDAO.getInstance().save(t);
+            TransactionDao.getInstance().save(t);
 
             // Post event
-            TradeViewEvent event = new TradeViewEvent(TradeViewEvent.ORDER_PLACED);
-            event.setTransactionParam(t);
-            EventBusUtil.get().post(event);
+            tm.addTransaction(t);
+            EventBusUtil.get().post(new TradeViewEvent(TradeViewEvent.UPDATE_TABLE));
 
             Order.this.dispose();
         });

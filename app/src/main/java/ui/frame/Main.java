@@ -21,6 +21,7 @@ public class Main extends JFrame {
     private Provider provider;
     private Trade trade;
     private Chart chart;
+    private PositionView position;
 
     public Main() throws HeadlessException {
         setVisible(true);
@@ -34,21 +35,22 @@ public class Main extends JFrame {
     public void start() {
         EventQueue.invokeLater(() -> {
             Dimension fullScreenDim = getSize();
-            fullScreenDim.height -= 50;
+            fullScreenDim.height -= 60;
+            fullScreenDim.width -= 15;
 
-            provider.setSize((int)(fullScreenDim.width * 0.6), (int)(fullScreenDim.height * 0.3));
+            trade.setSize((int)(fullScreenDim.width * 0.3), (int)(fullScreenDim.height * 0.3));
+            trade.setLocation(0, 0);
 
-            trade.setSize(fullScreenDim.width - provider.getWidth(), (int)(fullScreenDim.height * 0.3));
-            trade.setLocation(provider.getWidth(), 0);
+            position.setSize((int)(fullScreenDim.width * 0.3), (int)(fullScreenDim.height * 0.2));
+            position.setLocation(0, trade.getHeight());
 
-            chart.setSize(fullScreenDim.width, fullScreenDim.height - provider.getHeight());
-            chart.setLocation(0, (int)(fullScreenDim.height * 0.3));
+            chart.setSize(fullScreenDim.width - trade.getWidth(), fullScreenDim.height);
+            chart.setLocation(trade.getWidth(), 0);
 
-            try {
-                provider.setSelected(true);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            provider.setSize(fullScreenDim.width - chart.getWidth(), (int)(fullScreenDim.height * 0.5));
+            provider.setLocation(0, trade.getHeight() + position.getHeight());
+
+            showCenter(new SignInSignUp());
         });
     }
 
@@ -66,10 +68,12 @@ public class Main extends JFrame {
         provider = new Provider();
         trade = new Trade();
         chart = new Chart();
+        position = new PositionView();
 
         desktop.add(provider);
         desktop.add(trade);
         desktop.add(chart);
+        desktop.add(position);
     }
 
     public void showCenter(JInternalFrame component) {
@@ -102,6 +106,9 @@ public class Main extends JFrame {
             case MainViewEvent.TOGGLE_VIEW_CHART:
                 chart.setVisible(!chart.isVisible());
                 break;
+            case MainViewEvent.TOGGLE_VIEW_POSITION:
+                position.setVisible(!position.isVisible());
+                break;
             case MainViewEvent.PROVIDER_ADD_NEW:
                 showCenter(new AddNew());
                 break;
@@ -110,6 +117,9 @@ public class Main extends JFrame {
                 break;
             case MainViewEvent.TOOLS_TRADE_HISTORY:
                 showCenter(new TradeHistory());
+                break;
+            case MainViewEvent.SHOW_SIGN_IN:
+                showCenter(new SignInSignUp());
                 break;
             default:
                 break;

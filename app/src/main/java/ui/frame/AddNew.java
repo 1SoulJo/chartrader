@@ -1,5 +1,9 @@
 package ui.frame;
 
+import event.EventBusUtil;
+import event.ProviderViewEvent;
+import provider.dao.PriceDao;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -28,22 +32,12 @@ public class AddNew extends JInternalFrame {
 
         GridBagConstraints c = new GridBagConstraints();
 
-        // ToDo : Link available items with actual data
-        String[] list = { "", "Hello 1", "Hello 2", "Hello 3", "Hello 4" };
-        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(list);
-        JComboBox<String> combo = new JComboBox<>(model);
+        PriceDao dao = PriceDao.get();
+        String[] arr = dao.getSymbols().toArray(new String[0]);
+        JComboBox<String> combo = new JComboBox<>(arr);
         combo.setEditable(true);
         combo.addActionListener((ActionEvent e) -> {
             System.out.println(e.getActionCommand());
-        });
-
-        combo.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                // ToDo: Auto complete
-                String input = combo.getEditor().getItem().toString() + e.getKeyChar();
-                combo.setPopupVisible(true);
-            }
         });
 
         c.gridx = 0; c.gridy = 0;
@@ -57,7 +51,10 @@ public class AddNew extends JInternalFrame {
         c.weightx = 0.5;
         c.fill = GridBagConstraints.HORIZONTAL;
         b.addActionListener((ActionEvent e) -> {
-            // ToDo : add new element
+            ProviderViewEvent ev = new ProviderViewEvent(ProviderViewEvent.ADD_INSTRUMENT);
+            ev.setInstrument((String) combo.getSelectedItem());
+            EventBusUtil.get().post(ev);
+
             dispose();
         });
         add(b, c);

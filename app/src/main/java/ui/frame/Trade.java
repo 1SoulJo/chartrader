@@ -4,18 +4,20 @@ import com.google.common.eventbus.Subscribe;
 import event.EventBusUtil;
 import event.MainViewEvent;
 import event.TradeViewEvent;
-import transaction.Transaction;
+import provider.entity.Transaction;
+import app.TransactionManager;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import java.awt.*;
+
+import java.util.List;
 
 /**
  * Trade frame.
  */
 public class Trade extends JInternalFrame {
-    private final String[] column = { "User", "Account Id", "Instrument", "Date", "Price", "Type", "Quantity"};
+    private final String[] column = { "Instrument", "Date", "Price", "Type", "Quantity", "Completed"};
     private JTable table;
     DefaultTableModel tableModel = new DefaultTableModel(column, 0);
 
@@ -45,29 +47,18 @@ public class Trade extends JInternalFrame {
         add(new JLabel("Orders"), c);
 
         // add table
-        c.weightx = 1.0; c.weighty = 0.5;
+        c.weightx = 1.0; c.weighty = 0.9;
         c.gridx = 0; c.gridy = 1;
         c.gridwidth = 2;
         c.fill = GridBagConstraints.BOTH;
         table = createTable();
         add(new JScrollPane(table), c);
 
-        // add label
-        c.weightx = 0.2; c.weighty = 0.1;
-        c.gridwidth = 1;
-        c.gridx = 0; c.gridy = 2;
-        add(new JLabel("Place order"), c);
-
-        // add text box
-        c.weightx = 0.8; c.weighty = 0.1;
-        c.gridx = 1; c.gridy = 2;
-        JTextField tf = new JTextField();
-        add(tf, c);
-
         // add buttons
         JButton b;
-
-        c.gridx = 0; c.gridy = 3;
+        c.weightx = 0.2; c.weighty = 0.01;
+        c.gridwidth = 1;
+        c.gridx = 0; c.gridy = 2;
         b = new JButton("Buy");
         b.addActionListener((e) -> {
             MainViewEvent event = new MainViewEvent(MainViewEvent.TRADE_OPEN_ORDER);
@@ -76,12 +67,25 @@ public class Trade extends JInternalFrame {
         });
         add(b, c);
 
-        c.gridx = 1; c.gridy = 3;
+        c.gridx = 1; c.gridy = 2;
         b = new JButton("Sell");
         b.addActionListener((e) -> {
             MainViewEvent event = new MainViewEvent(MainViewEvent.TRADE_OPEN_ORDER);
             event.setIntParam(Transaction.TYPE_SELL);
             EventBusUtil.get().post(event);
+        });
+        add(b, c);
+
+        c.gridx = 0; c.gridy = 3;
+        c.gridwidth = 2;
+        b = new JButton("Cancel");
+        b.addActionListener((e) -> {
+            int id = table.getSelectedRow();
+            if (id > -1) {
+                if (TransactionManager.get().cancelTransaction(id)) {
+                    tableModel.removeRow(id);
+                }
+            }
         });
         add(b, c);
     }
@@ -99,11 +103,27 @@ public class Trade extends JInternalFrame {
     @Subscribe
     public void onTradeEvent(TradeViewEvent e) {
         switch (e.getType()) {
-            case TradeViewEvent.ORDER_PLACED:
-                Transaction t = e.getTransactionParam();
-                tableModel.addRow(new Object[]{t.getUserId(), t.getAccountId(), t.getInstrumentId(), t.getDate(),
-                        t.getPrice(), t.getType() == 0 ? "Buy" : "Sell", t.getQuantity()});
+            case TradeViewEvent.UPDATE_TABLE:
+                System.out.println("UPDATE_TABLE");
+                List<Transaction> list = TransactionManager.get().getTransactions();
+                if (list.size() > tableModel.getRowCount()) {
+                    for (int i = tableModel.getRowCount(); i < list.size(); i++) {
+                        Transaction t = list.get(i);
+                        tableModel.addRow(new Object[]{
+                                t.getInstrumentId(), t.getDate(),
+                                t.getPrice(), t.getType() == 0 ? "Buy" : "Sell", t.getQuantity(), t.isCompleted()
+                        });
+                    }
+                }
                 table.repaint();
+                break;
+
+            case TradeViewEvent.UPDATE_ROW:
+                System.out.println("UDPATE ROW");
+                int index = e.getUpdateIndex();
+                tableModel.setValueAt(true, index, 5);
+                break;
+            default:
                 break;
         }
     }

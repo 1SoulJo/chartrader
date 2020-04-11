@@ -2,7 +2,6 @@ package ui.menu;
 
 import event.EventBusUtil;
 import event.MainViewEvent;
-import ui.frame.Main;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,12 +17,13 @@ public class MenuBar extends JMenuBar {
     private JMenu tools = new JMenu("Tools");
 
     // MenuItem
-    private JMenuItem fImport = new JMenuItem("Import data");
+    private JMenuItem fSignIn = new JMenuItem("Sign In");
     private JMenuItem fExit = new JMenuItem("Exit");
 
     private JMenuItem vProvider = new JMenuItem("Provider");
     private JMenuItem vTrade = new JMenuItem("Trade");
     private JMenuItem vChart = new JMenuItem("Chart");
+    private JMenuItem vPosition = new JMenuItem("Position");
 
     private JMenuItem tTradeHistory = new JMenuItem("Trade History");
 
@@ -40,15 +40,14 @@ public class MenuBar extends JMenuBar {
             add(tools);
 
             // Init File menu
-            fImport.addActionListener((e) -> {
-                JFileChooser fc = new JFileChooser();
-                fc.showOpenDialog(MenuBar.this);
+            fSignIn.addActionListener((e) -> {
+                EventBusUtil.get().post(new MainViewEvent(MainViewEvent.SHOW_SIGN_IN));
             });
             fExit.addActionListener((e) -> System.exit(0));
             fExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.ALT_DOWN_MASK));
 
             file.setMnemonic(KeyEvent.VK_F);
-            file.add(fImport);
+            file.add(fSignIn);
             file.add(fExit);
 
             // Init View menu
@@ -64,9 +63,15 @@ public class MenuBar extends JMenuBar {
             vChart.addActionListener(
                     (e) -> EventBusUtil.get().post(new MainViewEvent(MainViewEvent.TOGGLE_VIEW_CHART)));
 
+            vPosition.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.ALT_DOWN_MASK));
+            vPosition.addActionListener(
+                    (e) -> EventBusUtil.get().post(new MainViewEvent(MainViewEvent.TOGGLE_VIEW_POSITION)));
+
             view.setMnemonic(KeyEvent.VK_V);
-            view.add(vProvider);
+
             view.add(vTrade);
+            view.add(vProvider);
+            view.add(vPosition);
             view.add(vChart);
 
             tTradeHistory.addActionListener(

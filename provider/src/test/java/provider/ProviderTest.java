@@ -37,13 +37,4 @@ public class ProviderTest {
             e.printStackTrace();
         }
     }
-
-    @Test
-    public void priceTest() {
-        PriceDao dao = PriceDao.get();
-
-        dao.getSymbols().forEach(System.out::println);
-
-        dao.getPriceData("AAPL").forEach(System.out::println);
-    }
 }

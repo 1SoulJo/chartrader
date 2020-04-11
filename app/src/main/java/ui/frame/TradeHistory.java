@@ -1,7 +1,7 @@
 package ui.frame;
 
-import transaction.Transaction;
-import transaction.TransactionDAO;
+import provider.entity.Transaction;
+import provider.dao.TransactionDao;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -54,7 +54,7 @@ public class TradeHistory extends JInternalFrame {
             JFileChooser fc = new JFileChooser();
             fc.showOpenDialog(TradeHistory.this);
             File f = fc.getSelectedFile();
-            updateData(TransactionDAO.getInstance().getTransaction(f.getPath()));
+            updateData(TransactionDao.getInstance().getTransaction(f.getPath()));
         });
         add(b, c);
     }
@@ -73,9 +73,11 @@ public class TradeHistory extends JInternalFrame {
         DefaultTableModel tableModel = new DefaultTableModel(column, 0);
 
         // default data
-        for (Transaction t : TransactionDAO.getInstance().getTransaction()) {
-            tableModel.addRow(new Object[]{t.getUserId(), t.getAccountId(), t.getInstrumentId(), t.getDate(),
-            t.getPrice(), t.getType() == 0 ? "Buy" : "Sell", t.getQuantity()});
+        if (TransactionDao.getInstance().getTransaction().size() > 0) {
+            for (Transaction t : TransactionDao.getInstance().getTransaction()) {
+                tableModel.addRow(new Object[]{t.getUserId(), t.getAccountId(), t.getInstrumentId(), t.getDate(),
+                        t.getPrice(), t.getType() == 0 ? "Buy" : "Sell", t.getQuantity()});
+            }
         }
 
         JTable t = new JTable(tableModel);

@@ -1,9 +1,14 @@
 package ui.frame;
 
+import com.google.common.eventbus.Subscribe;
+import event.ChartViewEvent;
 import event.EventBusUtil;
 import event.MainViewEvent;
+import event.ProviderViewEvent;
+import app.TransactionManager;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
@@ -15,6 +20,9 @@ public class Provider extends JInternalFrame {
 
     public Provider() {
         init();
+
+        // Register event listener
+        EventBusUtil.get().register(this);
     }
 
     private void init() {
@@ -36,36 +44,12 @@ public class Provider extends JInternalFrame {
         JButton b;
 
         // buttons
-        b = new JButton("Add");
+        b = new JButton("Load Instruments");
         c.fill = GridBagConstraints.BOTH;
         c.weightx = 0.5; c.weighty = 0.1;
         c.gridx = 0; c.gridy = 2;
         b.addActionListener((ActionEvent e) -> {
             EventBusUtil.get().post(new MainViewEvent(MainViewEvent.PROVIDER_ADD_NEW));
-        });
-        pane.add(b, c);
-
-        b = new JButton("Remove");
-        c.fill = GridBagConstraints.BOTH;
-        c.weighty = 0.1;
-        c.gridx = 1; c.gridy = 2;
-        b.addActionListener((ActionEvent e) -> {
-            int selected = table.getSelectedRow();
-            if (selected < 0) {
-                return;
-            }
-
-            String selectedItem = (String) table.getModel().getValueAt(selected, 0);
-
-            String[] options = { "Cancel", "Ok" };
-            JOptionPane.showOptionDialog(this,
-                    "Removing " + selectedItem,
-                    "Remove item",
-                    JOptionPane.YES_NO_CANCEL_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    options,
-                    options[0]);
         });
         pane.add(b, c);
 
@@ -79,23 +63,65 @@ public class Provider extends JInternalFrame {
     }
 
     private JTable createTable() {
-        // ToDo : Link data from DB
         String column[] = {"Name", "Current Price", "Volume"};
-        String data[][] = {
-                {"S&P 500", "3012.30", "670000"},
-                {"Crude Oil", "67.20", "20000"},
-                {"Euro FX", "1211.30", "670000"},
-                {"Gold", "1213.4", "23321"},
-                {"Soybean", "31.12", "1210100"}
-        };
+        String data[][] = {};
 
-        JTable t = new JTable(data, column);
+        JTable t = new JTable(new DefaultTableModel(column, 0));
         t.setBackground(Color.GRAY);
         t.setForeground(Color.WHITE);
         t.setShowVerticalLines(true);
         t.setShowVerticalLines(true);
         t.setShowHorizontalLines(true);
 
+        t.getSelectionModel().addListSelectionListener((e) -> {
+            System.out.println(e.getValueIsAdjusting());
+            if (!e.getValueIsAdjusting()) {
+                String inst = t.getValueAt(t.getSelectedRow(), 0).toString();
+                ChartViewEvent ev = new ChartViewEvent(ChartViewEvent.SHOW_INSTRUMENT);
+                ev.setInstrument(inst);
+                EventBusUtil.get().post(ev);
+            }
+        });
+
         return t;
+    }
+
+    /**
+     * Event Listener for any event that main view is responsible
+     * @param e ProviderViewEvent
+     */
+    @Subscribe
+    public void onMainViewEvent(ProviderViewEvent e) {
+        String inst = e.getInstrument();
+        DefaultTableModel m = (DefaultTableModel) table.getModel();
+
+        switch (e.getType()) {
+            case ProviderViewEvent.ADD_INSTRUMENT:
+                boolean found = false;
+                for (int i = 0; i < m.getRowCount(); i++) {
+                    if (m.getValueAt(i, 0).equals(inst)) {
+                        found = true;
+                    }
+                }
+                if (!found) {
+                    m.addRow(new Object[] { inst, "N/A", "N/A" } );
+                }
+                break;
+
+            case ProviderViewEvent.CANDLE_ADDED:
+                TransactionManager tm = TransactionManager.get();
+
+                for (int i = 0; i < m.getRowCount(); i++) {
+                    if (m.getValueAt(i, 0).equals(inst)) {
+                        m.setValueAt(tm.getPrice(), i, 1);
+                        m.setValueAt(tm.getVolume(), i, 2);
+                        break;
+                    }
+                }
+                break;
+
+            default:
+                break;
+        }
     }
 }
