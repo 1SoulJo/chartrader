@@ -73,10 +73,12 @@ public class TradeHistory extends JInternalFrame {
         DefaultTableModel tableModel = new DefaultTableModel(column, 0);
 
         // default data
-        if (TransactionDao.getInstance().getTransaction().size() > 0) {
-            for (Transaction t : TransactionDao.getInstance().getTransaction()) {
-                tableModel.addRow(new Object[]{t.getUserId(), t.getAccountId(), t.getInstrumentId(), t.getDate(),
-                        t.getPrice(), t.getType() == 0 ? "Buy" : "Sell", t.getQuantity()});
+        if (TransactionDao.getInstance().getTransaction() != null) {
+            if (TransactionDao.getInstance().getTransaction().size() > 0) {
+                for (Transaction t : TransactionDao.getInstance().getTransaction()) {
+                    tableModel.addRow(new Object[]{t.getUserId(), t.getAccountId(), t.getInstrumentId(), t.getDate(),
+                            t.getPrice(), t.getType() == 0 ? "Buy" : "Sell", t.getQuantity()});
+                }
             }
         }
 

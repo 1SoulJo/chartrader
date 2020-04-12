@@ -28,7 +28,7 @@ public class Credential {
     }
 
     public boolean signIn(String user, String password) {
-        if (AccountDao.get().getUser(user, password) != null) {
+        if (AccountDao.get().getUser(user, password).size() > 0) {
             isLoggedIn = true;
             this.userId = user;
 

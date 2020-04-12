@@ -1,5 +1,6 @@
 package ui.frame;
 
+import app.Credential;
 import event.EventBusUtil;
 import event.TradeViewEvent;
 import provider.entity.Position;
@@ -90,8 +91,9 @@ public class Order extends JInternalFrame {
         p = new JPanel();
         b = new JButton("Place Order");
         b.addActionListener((e) -> {
+            Credential credential = Credential.get();
             Transaction t = new Transaction();
-            t.setUserId("Hansol");
+            t.setUserId(credential.getUserId());
             t.setAccountId(1);
             t.setInstrumentId(name.getText());
             SimpleDateFormat dayTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
